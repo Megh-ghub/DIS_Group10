@@ -7,35 +7,36 @@
         </div>
 
 
+        <div class="alert alert-success">
 
-
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-content">
-                    <div class="row">
-                        <div class="col-sm-3"><b>Park Name</b></div>
-                        <div class="col-sm-9">@Html.DisplayFor(model => model.fullName)</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3"><b>State</b></div>
-                        <div class="col-sm-9">
-                            @foreach (var item in Model.states)
-                            {
-                @Html.DisplayFor(modelItem => item.state.name)}
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-sm-3"><b>Park Name</b></div>
+                            <div class="col-sm-9">@Html.DisplayFor(model => model.fullName)</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"><b>State</b></div>
+                            <div class="col-sm-9">
+                                @foreach (var item in Model.states)
+                                {
+                    @Html.DisplayFor(modelItem => item.state.name)}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <form method="post" asp-controller="Home" asp-action="Delete">
+                <input type="hidden" asp-for="ID" />
+                <div class="input-field col-sm-12 center-align">
+                    <button class="btn waves-effect waves-green red" type="submit" name="action"><b>Click me to delete the park</b></button>
+
+                </div>
+            </form>
+
         </div>
 
-
-        <form method="post" asp-controller="Home" asp-action="Delete">
-            <input type="hidden" asp-for="ID" />
-            <div class="input-field col-sm-12 center-align">
-                <button class="btn waves-effect waves-green red" type="submit" name="action"><b>Click me to delete the park</b></button>
-                
-            </div>
-        </form>
-
+        </div>
     </div>
-</div>
