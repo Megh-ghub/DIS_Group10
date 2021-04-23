@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Datamodel";
+}
+
+<!--- Welcome Section -->
+<div class="container">
+    <h2>National Park Service Datamodel</h2>
+    <p><i>The National Park Service is an agency of the federal government of the United States that manages all national parks, many national monuments, and other conservation and historical properties.</i></p>
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Datamodel</a>
+                </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <p>
+                        The data model contains two one-to-many relationships. One between the entity <b><i>Auction House</i></b>
+                        and <b><i>Sales</i></b> and another between <b><i>Officer details</i></b> and <b><i>Items.</i></b>.
+                        <br>
+                        <img src="~/img/datamodel.png" height="450" width="750"></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">API Documentation</a>
+                </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>
+                        We have used <b>GSA Auction Developer interface</b> application programming interface.
+                        All the api documents and usage guides are available <a href="https://gsa.github.io/auctions_api/basics">here.</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Key Terms</a>
+                </h4>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>
+                        <b>GSA:</b> General Services Administration (GSA)
+                        <br>
+                        <b>Auction:</b> An auction is usually a process of buying and selling goods or services by offering them up for bid, taking bids, and then selling the item to the highest bidder or buying the item from the lowest bidder.
+                        <br>
+                        <b>Bid or Bidding:</b> Bidding is used to determine the cost or value of something.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Contributions</a>
+                </h4>
+            </div>
+            <div id="collapse4" class="panel-collapse collapse">
+                <div class="panel-body">We have used Visual Studio code Editor, Bootstrap and github to collaborate across the team during various stages of bug-fixing and development.</div>
+            </div>
+        </div>
+    </div>
+</div>

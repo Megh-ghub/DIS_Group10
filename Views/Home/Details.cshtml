@@ -1,0 +1,51 @@
+﻿@model DIS_Group10.Models.Park
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container-fluid padding">
+    <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row padding">
+                        <h4 class="card-title text-center">
+                            <a class="col-sm-12">@Html.DisplayFor(model => model.fullName)</a>
+                        </h4>
+                    </div>
+                    <div class="row padding">
+                        <div class="col-sm-3"><b>Park URL</b></div>
+                        <div class="col-sm-9"><a href="@Model.url">@Html.DisplayFor(model => model.url)</a></div>
+                    </div>
+                    <div class="row padding">
+                        <div class="col-sm-3"><b>Park Code</b></div>
+                        <div class="col-sm-9">@Html.DisplayFor(model => model.parkCode)</div>
+                    </div>
+                    <div class="row padding">
+                        <div class="col-sm-3"><b>Park Name</b></div>
+                        <div class="col-sm-9">@Html.DisplayFor(model => model.fullName)</div>
+                    </div>
+                    <div class="row padding">
+                        <div class="col-sm-3"><b>Park Description</b></div>
+                        <div class="col-sm-9">@Html.DisplayFor(model => model.description)</div>
+                    </div>
+                    <div class="row padding">
+                        <div class="col-sm-3"><b>Park State</b></div>
+                            @foreach (var item in Model.states)
+                            {
+                                @Html.DisplayFor(modelItem => item.state.name)
+                            }
+                        </div>
+                    </div>
+                    <div class="row padding">
+                        <div class="col-sm-3"><b>Park Activities</b></div>
+                        <div class="col-sm-9">
+                            @foreach (var item in Model.activities)
+                            {
+                                    @Html.DisplayFor(modelItem => item.activity.name)<a> | </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>

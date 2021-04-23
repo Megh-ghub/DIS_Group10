@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "GetInTouch";
+}
+
+<!--- Get In Touch -->
+
+<div class="container-fluid padding">
+    <div class="row welcome text-center">
+        <div class="col-12">
+            <h1 class="display-4">Enter the name of Contract Officer</h1>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <input type="text" name="Contract Officer" class="sticky-top field-split align-center" placeholder="Contract Officer">
+</div>
+<div class="row justify-content-center">
+    <input type='button' class="btn btn-primary btn-md" onclick='tableFromJson()' value='Search' />
+</div>
+
+
+<p id='showData'></p>
+
+<p id='msg'></p>
