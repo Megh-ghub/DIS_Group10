@@ -32,7 +32,8 @@
         <form method="post" asp-controller="Home" asp-action="Delete">
             <input type="hidden" asp-for="ID" />
             <div class="input-field col-sm-12 center-align">
-                <button class="btn waves-effect waves-green red" type="submit" name="action"><b>Click me to delete the park</b></button>
+                
+                <input type='button' class="btn btn-primary btn-md" onclick='tableFromJson()' value='Click me to delete the park'/>
             </div>
         </form>
 
