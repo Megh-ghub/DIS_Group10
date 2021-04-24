@@ -1,1 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Chart";
+}
+
+@section chart
+{
+    <script src="~/js/chart.js"></script>
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-content">
+            <div class="row center-align">
+                <div class="input-field col s12">
+                    <h4>Select Activity to Explore</h4>
+                </div>
+            </div>
+            <div class="row">
+                <form>
+                    <div class="input-field col m12 center-align">
+                        <select ID="activities">
+                            <option value="All" selected>All Activities</option>
+                            @foreach (var item in ViewBag.adict.Keys)
+                            {
+                                <option value="@item">@ViewBag.adict[item]</option>
+                            }
+                        </select>
+                        <label>Activity</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <canvas id="barchart"></canvas>
+</div>
+
 ﻿
+
