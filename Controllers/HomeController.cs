@@ -60,10 +60,10 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> anames = _context.Activities.Select(p => p.name).ToList();
+            List<string> actname = _context.Activities.Select(p => p.name).ToList();
 
-            ViewBag.statedict = dict;
-            ViewBag.anames = anames;
+            ViewBag.dstate = dict;
+            ViewBag.actname = actname;
 
             return View(plist);
         }
@@ -88,8 +88,8 @@ namespace DIS_Group10.Controllers
                 dict.Add(i.ID, i.name);
             }
             List<string> an = await _context.Activities.Select(p => p.name).ToListAsync();
-            ViewBag.anames = an;
-            ViewBag.statedict = dict;
+            ViewBag.actname = an;
+            ViewBag.dstate = dict;
             return View();
         }
 
@@ -149,8 +149,8 @@ namespace DIS_Group10.Controllers
                 dict.Add(i.ID, i.name);
             }
             List<string> an = await _context.Activities.Select(p => p.name).ToListAsync();
-            ViewBag.anames = an;
-            ViewBag.statedict = dict;
+            ViewBag.actname = an;
+            ViewBag.dstate = dict;
             return View(pk);
         }
 //CRUD - Create Ends
@@ -183,17 +183,17 @@ namespace DIS_Group10.Controllers
 //CRUD - Update Starts 
         public async Task<IActionResult> Edit(string id)
         {
-            Park parkToUpdate = _context.Parks.Where(p => p.ID == id).FirstOrDefault();
-            List<string> park_a = _context.ParkActivities.Where(p => p.park == parkToUpdate).Select(p => p.activity.name).ToList();
-            List<string> park_s = _context.StateParks.Where(p => p.park == parkToUpdate).Select(p => p.state.ID).ToList();
+            Park updtPark = _context.Parks.Where(p => p.ID == id).FirstOrDefault();
+            List<string> park_a = _context.ParkActivities.Where(p => p.park == updtPark).Select(p => p.activity.name).ToList();
+            List<string> park_s = _context.StateParks.Where(p => p.park == updtPark).Select(p => p.state.ID).ToList();
 
-            AddNewPark cp_edit = new AddNewPark()
+            AddNewPark np = new AddNewPark()
             {
-                ID = parkToUpdate.ID,
-                fullName = parkToUpdate.fullName,
-                parkCode = parkToUpdate.parkCode,
-                url = parkToUpdate.url,
-                description = parkToUpdate.description,
+                ID = updtPark.ID,
+                fullName = updtPark.fullName,
+                parkCode = updtPark.parkCode,
+                url = updtPark.url,
+                description = updtPark.description,
                 activitynames = park_a,
                 statenames = park_s
             };
@@ -203,12 +203,12 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> anames = await _context.Activities.Select(p => p.name).ToListAsync();
+            List<string> actname = await _context.Activities.Select(p => p.name).ToListAsync();
 
-            ViewBag.statedict = dict;
-            ViewBag.anames = anames;
+            ViewBag.dstate = dict;
+            ViewBag.actname = actname;
 
-            return View(cp_edit);
+            return View(np);
         }
 
         [HttpPost]
@@ -219,43 +219,43 @@ namespace DIS_Group10.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Park ptobeupdated = _context.Parks
+                    Park updtpark = _context.Parks
                         .Include(p => p.activities)
                         .Include(p => p.states)
                         .Where(p => p.ID == id)
                         .FirstOrDefault();
 
-                    ptobeupdated.url = modifiedp.url;
-                    ptobeupdated.fullName = modifiedp.fullName;
-                    ptobeupdated.parkCode = modifiedp.parkCode;
-                    ptobeupdated.description = modifiedp.description;
+                    updtpark.url = modifiedp.url;
+                    updtpark.fullName = modifiedp.fullName;
+                    updtpark.parkCode = modifiedp.parkCode;
+                    updtpark.description = modifiedp.description;
 
-                    ptobeupdated.activities.Clear();
+                    updtpark.activities.Clear();
 
                     foreach (string aname in modifiedp.activitynames)
                     {
                         Activity a = _context.Activities.Where(a => a.name == aname).FirstOrDefault();
                         ParkActivity pa = new ParkActivity()
                         {
-                            park = ptobeupdated,
+                            park = updtpark,
                             activity = a
                         };
-                        ptobeupdated.activities.Add(pa);
+                        updtpark.activities.Add(pa);
                     }
 
-                    ptobeupdated.states.Clear();
+                    updtpark.states.Clear();
 
                     foreach (string sname in modifiedp.statenames)
                     {
                         State s = _context.States.Where(s => s.ID == sname).FirstOrDefault();
                         StatePark sp = new StatePark()
                         {
-                            park = ptobeupdated,
+                            park = updtpark,
                             state = s
                         };
-                        ptobeupdated.states.Add(sp);
+                        updtpark.states.Add(sp);
                     }
-                    _context.Update(ptobeupdated);
+                    _context.Update(updtpark);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -269,10 +269,10 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> anames = await _context.Activities.Select(p => p.name).ToListAsync();
+            List<string> actname = await _context.Activities.Select(p => p.name).ToListAsync();
 
-            ViewBag.statedict = dict;
-            ViewBag.anames = anames;
+            ViewBag.dstate = dict;
+            ViewBag.actname = actname;
             return View(modifiedp);
         }
 //CRUD - Update Ends
