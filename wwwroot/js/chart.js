@@ -4,7 +4,7 @@
     f.append("id", aID);
     $.ajax({
         method: "POST",
-        url: "/Park/Explore",
+        url: "/Park/Chart",
         cache: false,
         contentType: false,
         processData: false,
