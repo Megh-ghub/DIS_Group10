@@ -4,36 +4,38 @@
     ViewData["Title"] = "Edit";
 }
 
-
 <div class="container">
     <div class="card text-center">
-      <div class="card-body">
-                <h4 class="card-title text-center">
-                    <a class="col-sm-12">@Html.DisplayFor(model => model.fullName)</a>
-                </h4>
+        <div class="card-body">
+            <h4 class="card-title text-center">
+                <a class="col-sm-12">@Html.DisplayFor(model => model.fullName)</a>
+            </h4>
 
-                <form method="post" asp-controller="Home" asp-action="Edit">
+            <form method="post" asp-controller="Home" asp-action="Edit">
 
-                    <div class="input-field col-sm-12">
+                <label asp-for="description">Description of the Park</label>
+                <div class="input-field col-sm-12">
+                    <textarea asp-for="description" class="materialize-textarea"></textarea>
+                    <span asp-validation-for="description" class="red-text"></span>
+                </div>
 
-                        <label asp-for="activitynames">Activities Available in Park</label><br></br>
+                <label class="form-label select-label" asp-for="activitynames">Activities Supported</label>
+                <div class="input-field col-sm-12">
 
-                        <select multiple asp-for="activitynames">
-                            @foreach (var item in ViewBag.activitynames)
-                            {
-                                <option value="@item">@item</option>
-                            }
-                        </select>
+                    <select class="select" multiple asp-for="activitynames">
+                        @foreach (var item in ViewBag.activitynames)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="activitynames" class="red-text"></span>
+                </div>
 
-                        <span asp-validation-for="activitynames" class="red-text"></span>
-                    </div>
+                <div class="input-field col-sm-12">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Confirm Edit</button>
+                </div>
 
-                    <div class="input-field col-sm-12">
-                        <button class="btn waves-effect waves-light" type="submit" name="action">Confirm Edit</button>
-                    </div>
-
-                </form>
-
+            </form>
         </div>
     </div>
 </div>
