@@ -101,7 +101,7 @@ namespace DIS_Group10.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Park newpark = new Park()
+                    Park npk = new Park()
                     {
                         ID = DateTime.Now.ToString("yyyyMMddHHmmssffff"),
                         fullName = pk.fullName,
@@ -109,7 +109,7 @@ namespace DIS_Group10.Controllers
                         description = pk.description,
                         url = pk.url
                     };
-                    _context.Parks.Add(newpark);
+                    _context.Parks.Add(npk);
                     if (pk.activitynames != null)
                     {
                         foreach (string str in pk.activitynames)
@@ -117,7 +117,7 @@ namespace DIS_Group10.Controllers
                             Activity a = _context.Activities.Where(p => p.name == str).FirstOrDefault();
                             _context.ParkActivities.Add(new ParkActivity()
                             {
-                                park = newpark,
+                                park = npk,
                                 activity = a
                             });
                         }
@@ -129,7 +129,7 @@ namespace DIS_Group10.Controllers
                             State s = _context.States.Where(p => p.ID == str).FirstOrDefault();
                             _context.StateParks.Add(new StatePark()
                             {
-                                park = newpark,
+                                park = npk,
                                 state = s
                             });
                         }
@@ -184,8 +184,8 @@ namespace DIS_Group10.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             Park updtPark = _context.Parks.Where(p => p.ID == id).FirstOrDefault();
-            List<string> park_a = _context.ParkActivities.Where(p => p.park == updtPark).Select(p => p.activity.name).ToList();
-            List<string> park_s = _context.StateParks.Where(p => p.park == updtPark).Select(p => p.state.ID).ToList();
+            List<string> park_acct = _context.ParkActivities.Where(p => p.park == updtPark).Select(p => p.activity.name).ToList();
+            List<string> park_state = _context.StateParks.Where(p => p.park == updtPark).Select(p => p.state.ID).ToList();
 
             AddNewPark cp_edit = new AddNewPark()
             {
@@ -194,8 +194,8 @@ namespace DIS_Group10.Controllers
                 parkCode = updtPark.parkCode,
                 url = updtPark.url,
                 description = updtPark.description,
-                activitynames = park_a,
-                statenames = park_s
+                activitynames = park_acct,
+                statenames = park_state
             };
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -232,9 +232,9 @@ namespace DIS_Group10.Controllers
 
                     updtpark.activities.Clear();
 
-                    foreach (string aname in updatedpk.activitynames)
+                    foreach (string actname in updatedpk.activitynames)
                     {
-                        Activity a = _context.Activities.Where(a => a.name == aname).FirstOrDefault();
+                        Activity a = _context.Activities.Where(a => a.name == actname).FirstOrDefault();
                         ParkActivity pa = new ParkActivity()
                         {
                             park = updtpark,
@@ -354,7 +354,7 @@ namespace DIS_Group10.Controllers
             List<object> chartTable = new List<object>();
             List<string> statelist = _context.States.Select(s => s.ID).ToList();
             List<int> pcount = new List<int>();
-            string aname = _context.Activities.Where(a => a.ID == id).Select(a => a.name).FirstOrDefault();
+            string actname = _context.Activities.Where(a => a.ID == id).Select(a => a.name).FirstOrDefault();
             foreach (string s in statelist)
             {
                 int parkCount = 0;
@@ -377,7 +377,7 @@ namespace DIS_Group10.Controllers
             }
             chartTable.Add(statelist);
             chartTable.Add(pcount);
-            chartTable.Add(aname);
+            chartTable.Add(actname);
             return Json(chartTable);
         }
         // Chart JS Ends
