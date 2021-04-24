@@ -2,7 +2,7 @@
 using DIS_Group10.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq; 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,18 +15,21 @@ namespace DIS_Group10.Data
     {
         static HttpClient httpClient;
         static string BASE_URL = "https://developer.nps.gov/api/v1";
-        static string API_KEY = "VXU1saXu5sQvPJawH28GDeoVR8nT6C56vmxGiBFB"; 
+        static string API_KEY = "VXU1saXu5sQvPJawH28GDeoVR8nT6C56vmxGiBFB";
         public static void Initialize(ApplicationDbContext context)
         {
-            context.Database.EnsureCreated();           
-            getParks(context);
-            getActivities(context);
+            context.Database.EnsureCreated();
             getStates(context);
+
+            getActivities(context);
+            getParks(context);
         }
+
+// Get:: Park Data :: /parks
 
         public static void getParks(ApplicationDbContext context)
         {
-            
+
             if (context.Parks.Any())
             {
                 return;
@@ -54,9 +57,9 @@ namespace DIS_Group10.Data
                     JObject parsedResponse = JObject.Parse(responsebody);
                     JArray parks = (JArray)parsedResponse["data"];
 
-                    foreach(JObject jsonpark in parks)
+                    foreach (JObject jsonpark in parks)
                     {
-                        Park p = new Park 
+                        Park p = new Park
                         {
                             ID = (string)jsonpark["id"],
                             url = (string)jsonpark["url"],
@@ -66,10 +69,10 @@ namespace DIS_Group10.Data
                         };
                         context.Parks.Add(p);
                         string[] states = ((string)jsonpark["states"]).Split(",");
-                        foreach(string s in states)
+                        foreach (string s in states)
                         {
                             State st = context.States.Where(c => c.ID == s).FirstOrDefault();
-                            if(st != null)
+                            if (st != null)
                             {
                                 StatePark sp = new StatePark()
                                 {
@@ -81,7 +84,7 @@ namespace DIS_Group10.Data
                             }
                         }
                         JArray activities = (JArray)jsonpark["activities"];
-                        if(activities.Count != 0)
+                        if (activities.Count != 0)
                         {
                             foreach (JObject jsonactivity in activities)
                             {
@@ -103,7 +106,7 @@ namespace DIS_Group10.Data
                                 };
                                 context.ParkActivities.Add(pa);
                             }
-                        }                      
+                        }
                     }
                 }
             }
@@ -112,7 +115,9 @@ namespace DIS_Group10.Data
                 Console.WriteLine(e.Message);
             }
         }
-        
+
+// Get:: Activity Data :: /activities
+
         public static void getActivities(ApplicationDbContext context)
         {
             if (context.Activities.Any())
@@ -160,6 +165,8 @@ namespace DIS_Group10.Data
                 Console.WriteLine(e.Message);
             }
         }
+
+// Force Persisting State Code vs State Name for Clean Display Only
 
         public static void getStates(ApplicationDbContext context)
         {
@@ -233,5 +240,6 @@ namespace DIS_Group10.Data
                 Console.WriteLine(e.Message);
             }
         }
+
     }
 }

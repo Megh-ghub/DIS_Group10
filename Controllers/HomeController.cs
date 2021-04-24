@@ -32,7 +32,7 @@ namespace DIS_Group10.Controllers
             return View();
         }
 
-// Explore Park Data Start 
+        // Explore Park Data Start 
         public async Task<IActionResult> ExplorePark(string statename, string activityname, string parkname)
         {
             statename = (statename == null) ? "" : statename;
@@ -60,14 +60,14 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> actname = _context.Activities.Select(p => p.name).ToList();
+            List<string> activitynames = _context.Activities.Select(p => p.name).ToList();
 
-            ViewBag.dstate = dict;
-            ViewBag.actname = actname;
+            ViewBag.statedict = dict;
+            ViewBag.activitynames = activitynames;
 
             return View(plist);
         }
-// Explore Park Data Ends
+        // Explore Park Data Ends
 
         public IActionResult Model()
         {
@@ -79,7 +79,7 @@ namespace DIS_Group10.Controllers
             return View();
         }
 
-//CRUD - Create Starts 
+        //CRUD - Create Starts 
         public async Task<IActionResult> Create()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -88,8 +88,8 @@ namespace DIS_Group10.Controllers
                 dict.Add(i.ID, i.name);
             }
             List<string> an = await _context.Activities.Select(p => p.name).ToListAsync();
-            ViewBag.actname = an;
-            ViewBag.dstate = dict;
+            ViewBag.activitynames = an;
+            ViewBag.statedict = dict;
             return View();
         }
 
@@ -149,13 +149,13 @@ namespace DIS_Group10.Controllers
                 dict.Add(i.ID, i.name);
             }
             List<string> an = await _context.Activities.Select(p => p.name).ToListAsync();
-            ViewBag.actname = an;
-            ViewBag.dstate = dict;
+            ViewBag.activitynames = an;
+            ViewBag.statedict = dict;
             return View(pk);
         }
-//CRUD - Create Ends
+        //CRUD - Create Ends
 
-//CRUD - Read Starts 
+        //CRUD - Read Starts 
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -178,16 +178,16 @@ namespace DIS_Group10.Controllers
             ViewData["Title"] = "Details: " + p.parkCode;
             return View(p);
         }
-//CRUD - Read Ends
+        //CRUD - Read Ends
 
-//CRUD - Update Starts 
+        //CRUD - Update Starts 
         public async Task<IActionResult> Edit(string id)
         {
             Park updtPark = _context.Parks.Where(p => p.ID == id).FirstOrDefault();
             List<string> park_a = _context.ParkActivities.Where(p => p.park == updtPark).Select(p => p.activity.name).ToList();
             List<string> park_s = _context.StateParks.Where(p => p.park == updtPark).Select(p => p.state.ID).ToList();
 
-            AddNewPark np = new AddNewPark()
+            AddNewPark cp_edit = new AddNewPark()
             {
                 ID = updtPark.ID,
                 fullName = updtPark.fullName,
@@ -203,17 +203,17 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> actname = await _context.Activities.Select(p => p.name).ToListAsync();
+            List<string> activitynames = await _context.Activities.Select(p => p.name).ToListAsync();
 
-            ViewBag.dstate = dict;
-            ViewBag.actname = actname;
+            ViewBag.statedict = dict;
+            ViewBag.activitynames = activitynames;
 
-            return View(np);
+            return View(cp_edit);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("url,fullName,parkCode,description,statenames,activitynames")] AddNewPark modifiedp)
+        public async Task<IActionResult> Edit(string id, [Bind("url,fullName,parkCode,description,statenames,activitynames")] AddNewPark updatedpk)
         {
             try
             {
@@ -225,14 +225,14 @@ namespace DIS_Group10.Controllers
                         .Where(p => p.ID == id)
                         .FirstOrDefault();
 
-                    updtpark.url = modifiedp.url;
-                    updtpark.fullName = modifiedp.fullName;
-                    updtpark.parkCode = modifiedp.parkCode;
-                    updtpark.description = modifiedp.description;
+                    updtpark.url = updatedpk.url;
+                    updtpark.fullName = updatedpk.fullName;
+                    updtpark.parkCode = updatedpk.parkCode;
+                    updtpark.description = updatedpk.description;
 
                     updtpark.activities.Clear();
 
-                    foreach (string aname in modifiedp.activitynames)
+                    foreach (string aname in updatedpk.activitynames)
                     {
                         Activity a = _context.Activities.Where(a => a.name == aname).FirstOrDefault();
                         ParkActivity pa = new ParkActivity()
@@ -245,7 +245,7 @@ namespace DIS_Group10.Controllers
 
                     updtpark.states.Clear();
 
-                    foreach (string sname in modifiedp.statenames)
+                    foreach (string sname in updatedpk.statenames)
                     {
                         State s = _context.States.Where(s => s.ID == sname).FirstOrDefault();
                         StatePark sp = new StatePark()
@@ -269,15 +269,15 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> actname = await _context.Activities.Select(p => p.name).ToListAsync();
+            List<string> activitynames = await _context.Activities.Select(p => p.name).ToListAsync();
 
-            ViewBag.dstate = dict;
-            ViewBag.actname = actname;
-            return View(modifiedp);
+            ViewBag.statedict = dict;
+            ViewBag.activitynames = activitynames;
+            return View(updatedpk);
         }
-//CRUD - Update Ends
+        //CRUD - Update Ends
 
-//CRUD - Delete Starts 
+        //CRUD - Delete Starts 
         public async Task<IActionResult> Delete(string id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -334,7 +334,7 @@ namespace DIS_Group10.Controllers
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
             }
         }
-//CRUD - Delete Starts
+        //CRUD - Delete Starts
 
         //Chart JS Starts 
         public IActionResult Chart()
