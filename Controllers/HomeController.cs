@@ -32,7 +32,7 @@ namespace DIS_Group10.Controllers
             return View();
         }
 
-// Explore Park Data Start 
+        // Explore Park Data Start 
         public async Task<IActionResult> ExplorePark(string statename, string activityname, string parkname)
         {
             statename = (statename == null) ? "" : statename;
@@ -60,14 +60,14 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> anames = _context.Activities.Select(p => p.name).ToList();
+            List<string> activitynames = _context.Activities.Select(p => p.name).ToList();
 
             ViewBag.statedict = dict;
-            ViewBag.anames = anames;
+            ViewBag.activitynames = activitynames;
 
             return View(plist);
         }
-// Explore Park Data Ends
+        // Explore Park Data Ends
 
         public IActionResult Model()
         {
@@ -79,7 +79,7 @@ namespace DIS_Group10.Controllers
             return View();
         }
 
-//CRUD - Create Starts 
+        //CRUD - Create Starts 
         public async Task<IActionResult> Create()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -88,7 +88,7 @@ namespace DIS_Group10.Controllers
                 dict.Add(i.ID, i.name);
             }
             List<string> an = await _context.Activities.Select(p => p.name).ToListAsync();
-            ViewBag.anames = an;
+            ViewBag.activitynames = an;
             ViewBag.statedict = dict;
             return View();
         }
@@ -101,7 +101,7 @@ namespace DIS_Group10.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Park newpark = new Park()
+                    Park npk = new Park()
                     {
                         ID = DateTime.Now.ToString("yyyyMMddHHmmssffff"),
                         fullName = pk.fullName,
@@ -109,7 +109,7 @@ namespace DIS_Group10.Controllers
                         description = pk.description,
                         url = pk.url
                     };
-                    _context.Parks.Add(newpark);
+                    _context.Parks.Add(npk);
                     if (pk.activitynames != null)
                     {
                         foreach (string str in pk.activitynames)
@@ -117,7 +117,7 @@ namespace DIS_Group10.Controllers
                             Activity a = _context.Activities.Where(p => p.name == str).FirstOrDefault();
                             _context.ParkActivities.Add(new ParkActivity()
                             {
-                                park = newpark,
+                                park = npk,
                                 activity = a
                             });
                         }
@@ -129,7 +129,7 @@ namespace DIS_Group10.Controllers
                             State s = _context.States.Where(p => p.ID == str).FirstOrDefault();
                             _context.StateParks.Add(new StatePark()
                             {
-                                park = newpark,
+                                park = npk,
                                 state = s
                             });
                         }
@@ -149,13 +149,13 @@ namespace DIS_Group10.Controllers
                 dict.Add(i.ID, i.name);
             }
             List<string> an = await _context.Activities.Select(p => p.name).ToListAsync();
-            ViewBag.anames = an;
+            ViewBag.activitynames = an;
             ViewBag.statedict = dict;
             return View(pk);
         }
-//CRUD - Create Ends
+        //CRUD - Create Ends
 
-//CRUD - Read Starts 
+        //CRUD - Read Starts 
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -178,24 +178,24 @@ namespace DIS_Group10.Controllers
             ViewData["Title"] = "Details: " + p.parkCode;
             return View(p);
         }
-//CRUD - Read Ends
+        //CRUD - Read Ends
 
-//CRUD - Update Starts 
+        //CRUD - Update Starts 
         public async Task<IActionResult> Edit(string id)
         {
-            Park parkToUpdate = _context.Parks.Where(p => p.ID == id).FirstOrDefault();
-            List<string> park_a = _context.ParkActivities.Where(p => p.park == parkToUpdate).Select(p => p.activity.name).ToList();
-            List<string> park_s = _context.StateParks.Where(p => p.park == parkToUpdate).Select(p => p.state.ID).ToList();
+            Park updtPark = _context.Parks.Where(p => p.ID == id).FirstOrDefault();
+            List<string> park_acct = _context.ParkActivities.Where(p => p.park == updtPark).Select(p => p.activity.name).ToList();
+            List<string> park_state = _context.StateParks.Where(p => p.park == updtPark).Select(p => p.state.ID).ToList();
 
             AddNewPark cp_edit = new AddNewPark()
             {
-                ID = parkToUpdate.ID,
-                fullName = parkToUpdate.fullName,
-                parkCode = parkToUpdate.parkCode,
-                url = parkToUpdate.url,
-                description = parkToUpdate.description,
-                activitynames = park_a,
-                statenames = park_s
+                ID = updtPark.ID,
+                fullName = updtPark.fullName,
+                parkCode = updtPark.parkCode,
+                url = updtPark.url,
+                description = updtPark.description,
+                activitynames = park_acct,
+                statenames = park_state
             };
 
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -203,59 +203,59 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> anames = await _context.Activities.Select(p => p.name).ToListAsync();
+            List<string> activitynames = await _context.Activities.Select(p => p.name).ToListAsync();
 
             ViewBag.statedict = dict;
-            ViewBag.anames = anames;
+            ViewBag.activitynames = activitynames;
 
             return View(cp_edit);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("url,fullName,parkCode,description,statenames,activitynames")] AddNewPark modifiedp)
+        public async Task<IActionResult> Edit(string id, [Bind("url,fullName,parkCode,description,statenames,activitynames")] AddNewPark updatedpk)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Park ptobeupdated = _context.Parks
+                    Park updtpark = _context.Parks
                         .Include(p => p.activities)
                         .Include(p => p.states)
                         .Where(p => p.ID == id)
                         .FirstOrDefault();
 
-                    ptobeupdated.url = modifiedp.url;
-                    ptobeupdated.fullName = modifiedp.fullName;
-                    ptobeupdated.parkCode = modifiedp.parkCode;
-                    ptobeupdated.description = modifiedp.description;
+                    updtpark.url = updatedpk.url;
+                    updtpark.fullName = updatedpk.fullName;
+                    updtpark.parkCode = updatedpk.parkCode;
+                    updtpark.description = updatedpk.description;
 
-                    ptobeupdated.activities.Clear();
+                    updtpark.activities.Clear();
 
-                    foreach (string aname in modifiedp.activitynames)
+                    foreach (string actname in updatedpk.activitynames)
                     {
-                        Activity a = _context.Activities.Where(a => a.name == aname).FirstOrDefault();
+                        Activity a = _context.Activities.Where(a => a.name == actname).FirstOrDefault();
                         ParkActivity pa = new ParkActivity()
                         {
-                            park = ptobeupdated,
+                            park = updtpark,
                             activity = a
                         };
-                        ptobeupdated.activities.Add(pa);
+                        updtpark.activities.Add(pa);
                     }
 
-                    ptobeupdated.states.Clear();
+                    updtpark.states.Clear();
 
-                    foreach (string sname in modifiedp.statenames)
+                    foreach (string sname in updatedpk.statenames)
                     {
                         State s = _context.States.Where(s => s.ID == sname).FirstOrDefault();
                         StatePark sp = new StatePark()
                         {
-                            park = ptobeupdated,
+                            park = updtpark,
                             state = s
                         };
-                        ptobeupdated.states.Add(sp);
+                        updtpark.states.Add(sp);
                     }
-                    _context.Update(ptobeupdated);
+                    _context.Update(updtpark);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -269,15 +269,15 @@ namespace DIS_Group10.Controllers
             {
                 dict.Add(i.ID, i.name);
             }
-            List<string> anames = await _context.Activities.Select(p => p.name).ToListAsync();
+            List<string> activitynames = await _context.Activities.Select(p => p.name).ToListAsync();
 
             ViewBag.statedict = dict;
-            ViewBag.anames = anames;
-            return View(modifiedp);
+            ViewBag.activitynames = activitynames;
+            return View(updatedpk);
         }
-//CRUD - Update Ends
+        //CRUD - Update Ends
 
-//CRUD - Delete Starts 
+        //CRUD - Delete Starts 
         public async Task<IActionResult> Delete(string id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -334,7 +334,7 @@ namespace DIS_Group10.Controllers
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
             }
         }
-//CRUD - Delete Starts
+        //CRUD - Delete Starts
 
         //Chart JS Starts 
         public IActionResult Chart()
@@ -354,7 +354,7 @@ namespace DIS_Group10.Controllers
             List<object> chartTable = new List<object>();
             List<string> statelist = _context.States.Select(s => s.ID).ToList();
             List<int> pcount = new List<int>();
-            string aname = _context.Activities.Where(a => a.ID == id).Select(a => a.name).FirstOrDefault();
+            string actname = _context.Activities.Where(a => a.ID == id).Select(a => a.name).FirstOrDefault();
             foreach (string s in statelist)
             {
                 int parkCount = 0;
@@ -377,7 +377,7 @@ namespace DIS_Group10.Controllers
             }
             chartTable.Add(statelist);
             chartTable.Add(pcount);
-            chartTable.Add(aname);
+            chartTable.Add(actname);
             return Json(chartTable);
         }
         // Chart JS Ends
