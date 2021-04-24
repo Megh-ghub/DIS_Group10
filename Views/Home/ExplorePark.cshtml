@@ -12,30 +12,35 @@
                 <h2 class="text-primary">Below are the list of National Parks</h2><p></p>
             </div>
 
-            @foreach (var park in Model)
-            {
-                <div class="row">
-                    <div class="col">
-                        <div class="card border-info mb-3">
-                            <div class="card-body">
-                                <h4 class="card-title">
-                                    <a href="@park.url">@Html.DisplayFor(modelItem => park.fullName)</a>
-                                </h4>
-                                <div class="row">
-                                    <div class="col">
-                                        @Html.DisplayFor(modelItem => park.description)
-                                    </div>
-                                </div>
+            <div class="alert alert-success">
+                @foreach (var park in Model)
+                {
+        <div class="row">
+            <div class="col">
+                <div class="card border-info mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a href="@park.url">@Html.DisplayFor(modelItem => park.fullName)</a>
+                        </h4>
+                        <div class="row">
+                            <div class="col">
+                                @Html.DisplayFor(modelItem => park.description)
                             </div>
-                                <div class="card-action">
-                                    <a asp-action="Edit" asp-route-id="@park.ID">Update</a> |
-                                    <a asp-action="Details" asp-route-id="@park.ID">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@park.ID">Delete</a>
-                                </div>
                         </div>
                     </div>
+                    <div class="card-action">
+                        <a asp-action="Edit" asp-route-id="@park.ID">Update</a> |
+                        <a asp-action="Details" asp-route-id="@park.ID">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@park.ID">Delete</a>
+                    </div>
                 </div>
-            }
+            </div>
+        </div>           
+                }
+
+             </div>
+
+
+            </div>
         </div>
-    </div>
 </div>

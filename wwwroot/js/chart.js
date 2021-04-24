@@ -65,7 +65,3 @@
 
 $('#activities').change(displaychart);
 $(document).ready(displaychart);
-
-
-
-
