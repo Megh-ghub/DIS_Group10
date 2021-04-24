@@ -183,21 +183,32 @@ namespace DIS_Group10.Controllers
 //CRUD - Update Starts 
         public async Task<IActionResult> Edit(string id)
         {
-            Park updtPark = _context.Parks.Where(p => p.ID == id).FirstOrDefault();
-            List<string> park_acct = _context.ParkActivities.Where(p => p.park == updtPark).Select(p => p.activity.name).ToList();
+            Park updatePark = _context.Parks.Where(p => p.ID == id).FirstOrDefault();
+            List<string> park_activity = _context.ParkActivities.Where(p => p.park == updatePark).Select(p => p.activity.name).ToList();
+            List<string> park_state = _context.StateParks.Where(p => p.park == updatePark).Select(p => p.state.ID).ToList();
 
-            AddNewPark updtnewpk = new AddNewPark()
+            AddNewPark pnew = new AddNewPark()
             {
-                fullName = updtPark.fullName,
-                description = updtPark.description,
-                activitynames = park_acct
+                ID = updatePark.ID,
+                fullName = updatePark.fullName,
+                parkCode = updatePark.parkCode,
+                url = updatePark.url,
+                description = updatePark.description,
+                activitynames = park_activity,
+                statenames = park_state
             };
 
-            List<string> activitynames = await _context.Activities.Select(p => p.name).ToListAsync();
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (State i in _context.States)
+            {
+                dict.Add(i.ID, i.name);
+            }
+            List<string> actnames = await _context.Activities.Select(p => p.name).ToListAsync();
 
-            ViewBag.activitynames = activitynames;
+            ViewBag.statedict = dict;
+            ViewBag.actnames = actnames;
 
-            return View(updtnewpk);
+            return View(pnew);
         }
 
         [HttpPost]
@@ -208,36 +219,62 @@ namespace DIS_Group10.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Park updtpark = _context.Parks
+                    Park ptobeupdated = _context.Parks
                         .Include(p => p.activities)
+                        .Include(p => p.states)
                         .Where(p => p.ID == id)
                         .FirstOrDefault();
 
-                    updtpark.description = updatedpk.description;
-                    updtpark.activities.Clear();
+                    ptobeupdated.url = updatedpk.url;
+                    ptobeupdated.fullName = updatedpk.fullName;
+                    ptobeupdated.parkCode = updatedpk.parkCode;
+                    ptobeupdated.description = updatedpk.description;
 
+                    ptobeupdated.activities.Clear();
                     foreach (string actname in updatedpk.activitynames)
                     {
                         Activity a = _context.Activities.Where(a => a.name == actname).FirstOrDefault();
                         ParkActivity pa = new ParkActivity()
                         {
-                            park = updtpark,
+                            park = ptobeupdated,
                             activity = a
                         };
-                        updtpark.activities.Add(pa);
+                        ptobeupdated.activities.Add(pa);
                     }
-                    _context.Update(updtpark);
+
+                    ptobeupdated.states.Clear();
+                    foreach (string sname in updatedpk.statenames)
+                    {
+                        State st = _context.States.Where(s => s.ID == sname).FirstOrDefault();
+                        StatePark spk = new StatePark()
+                        {
+                            park = ptobeupdated,
+                            state = st
+                        };
+                        ptobeupdated.states.Add(spk);
+                    }
+
+                    _context.Update(ptobeupdated);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
             }
+
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", "Error Occured");
             }
-            List<string> activitynames = await _context.Activities.Select(p => p.name).ToListAsync();
 
-            ViewBag.activitynames = activitynames;
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (State i in _context.States)
+            {
+                dict.Add(i.ID, i.name);
+            }
+
+            List<string> actnames = await _context.Activities.Select(p => p.name).ToListAsync();
+
+            ViewBag.statedict = dict;
+            ViewBag.actnames = actnames;
             return View(updatedpk);
         }
 //CRUD - Update Ends

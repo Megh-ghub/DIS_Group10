@@ -7,32 +7,70 @@
 <div class="container">
     <div class="card text-center">
         <div class="card-body">
-            <h4 class="card-title text-center">
-                <a class="col-sm-12">@Html.DisplayFor(model => model.fullName)</a>
-            </h4>
+            <h4 class="card-title text-center">Please Update The Park Details Below</h4>
 
             <form method="post" asp-controller="Home" asp-action="Edit">
 
-                <label asp-for="description">Description of the Park</label>
-                <div class="input-field col-sm-12">
-                    <textarea asp-for="description" class="materialize-textarea"></textarea>
-                    <span asp-validation-for="description" class="red-text"></span>
+                <div class="form-group">
+                    <label asp-for="fullName">Name of the Park</label>
+                    <div>
+                        <textarea class="form-control" asp-for="fullName" rows="1"></textarea>
+                        <span asp-validation-for="fullName"></span>
+                    </div>
                 </div>
 
-                <label class="form-label select-label" asp-for="activitynames">Activities Supported</label>
-                <div class="input-field col-sm-12">
+                <div class="form-group">
+                    <label asp-for="parkCode">Park Code</label>
+                    <div>
+                        <textarea class="form-control" asp-for="parkCode" rows="1"></textarea>
+                        <span asp-validation-for="parkCode"></span>
+                    </div>
+                </div>
 
-                    <select class="select" multiple asp-for="activitynames">
-                        @foreach (var item in ViewBag.activitynames)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>
-                    <span asp-validation-for="activitynames" class="red-text"></span>
+                <div class="form-group">
+                    <label asp-for="url">Park URL</label>
+                    <div>
+                        <textarea class="form-control" asp-for="url" rows="1"></textarea>
+                        <span asp-validation-for="url"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="description">About The Park</label>
+                    <div>
+                        <textarea class="form-control" asp-for="description" rows="10"></textarea>
+                        <span asp-validation-for="description"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="statenames">State</label>
+                    <div>
+                        <select multiple asp-for="statenames">
+                            @foreach (var item in ViewBag.statedict.Keys)
+                            {
+                                <option value="@item">@ViewBag.statedict[item]</option>
+                            }
+                        </select>
+                        <span asp-validation-for="statenames"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="activitynames">Activities</label>
+                    <div>
+                        <select multiple asp-for="activitynames">
+                            @foreach (var item in ViewBag.actnames)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                        <span asp-validation-for="activitynames"></span>
+                    </div>
                 </div>
 
                 <div class="input-field col-sm-12">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">Confirm Edit</button>
+                    <button class="btn waves-effect waves-light" type="submit" name="action"> Click to Submit Updates </button>
                 </div>
 
             </form>

@@ -25,7 +25,7 @@ namespace DIS_Group10.Data
             getParks(context);
         }
 
-// Get:: Park Data :: /parks
+// Get Data From API:: Park Data :: /parks
 
         public static void getParks(ApplicationDbContext context)
         {
@@ -116,7 +116,7 @@ namespace DIS_Group10.Data
             }
         }
 
-// Get:: Activity Data :: /activities
+// Get Data From API:: Activity Data :: /activities
 
         public static void getActivities(ApplicationDbContext context)
         {
@@ -166,7 +166,7 @@ namespace DIS_Group10.Data
             }
         }
 
-// Force Persisting State Code vs State Name for Clean Display Only
+// Park API Pulls State Code Only and not Name. Force Persisting State Code vs State Name in DB for Clean State Name Display
 
         public static void getStates(ApplicationDbContext context)
         {
