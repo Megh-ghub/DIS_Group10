@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Chart";
 }
-<div class="container">
+<div class="container-fluid">
     <canvas id="myChart"></canvas>
 </div>
 
@@ -9,26 +9,41 @@
     let myChart = document.getElementById('myChart').getContext('2d');
 
     // Global Options
-    Chart.defaults.global.defaultFontFamily = 'Lato';
+    Chart.defaults.global.defaultFontFamily ='Lato';
     Chart.defaults.global.defaultFontSize = 18;
     Chart.defaults.global.defaultFontColor = '#777';
 
     let massPopChart = new Chart(myChart, {
-        type: 'pie', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+
+        type: 'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
         data: {
-            labels: ['Alaska', 'California', 'Utah', 'Colorado', 'Arizona', 'Florida', 'Washington', 'Hawaii', 'South Dakota', 'Texas',
+            labels: ['California','Alaska', 'Utah', 'Colorado', 'Arizona', 'Florida', 'Washington', 'Hawaii', 'South Dakota', 'Texas',
                 'Wyoming', 'Arkansas', 'Kentucky', 'Maine', 'Michigan', 'Minnesota', 'Montana', 'Nevada', 'New Mexico', 'North Carolina', 'North Dakota', 'Ohio', 'Oregon',
-                'South Carolina', 'Tennessee', 'Virginia', 'American Samoa', 'United States Virgin Islands'],
+                'South Carolina', 'Tennessee', 'Virginia', 'American Samoa', 'United States Virgin Islands','Alabama'],
             datasets: [{
                 label: 'Number of Parks',
-                data: [8, 8, 5, 4, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                //backgroundColor:'green',
-                backgroundColor: [
+                data: [9, 8, 5, 4, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,0],
+                backgroundColor:'#E6E6FA',
+               /* backgroundColor: [
                     'rgba(255, 99, 132, 0.6)',
                     'rgba(54, 162, 235, 0.6)',
                     'rgba(255, 206, 86, 0.6)',
                     'rgba(75, 192, 192, 0.6)',
                     'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.4)',
+                    'rgba(240,128,128)',
+                    'rgba((216,191,216))',
+                    'rgba(72,209,204)',
+                    'rgba(245,222,179)',
+                    'rgba(0,255,255)',
+                    'rgba(224,255,255)',
+                    'rgba(255,235,205)',
+                    'rgba(188,143,143)',
+                    'rgba(173,255,47)',
+                    'rgba(152,251,152)',
                     'rgba(255, 159, 64, 0.6)',
                     'rgba(255, 99, 132, 1)',
                     'rgba(255, 206, 86, 0.8)',
@@ -45,7 +60,7 @@
                     'rgba(75, 192, 192, 0.4)',
                     'rgba(153, 102, 255, 0.2)',
 
-                ],
+                ],*/
                 borderWidth: 0,
                 borderColor: '#777',
                 hoverBorderWidth: 3,
@@ -79,4 +94,3 @@
         }
     });
 </script>
-
