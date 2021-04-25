@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DIS_Group10.Data
+namespace DIS_Group10.DataAccess
 {
     public class ApplicationDbContext : DbContext
     {

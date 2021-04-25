@@ -1,4 +1,4 @@
-﻿using DIS_Group10.Data;
+﻿using DIS_Group10.DataAccess;
 using DIS_Group10.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace DIS_Group10.Data
+namespace DIS_Group10.DataAccess
 {
     public static class DbInitializer
     {
@@ -171,7 +171,8 @@ namespace DIS_Group10.Data
         public static void getStates(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
-            State[] stlist = new State[]
+
+            State[] statelist = new State[]
             {
                 new State{ID="AL",name="Alabama"},
                 new State{ID="AK",name="Alaska"},
@@ -224,20 +225,14 @@ namespace DIS_Group10.Data
                 new State{ID="WI",name="Wisconsin"},
                 new State{ID="WY",name="Wyoming"},
             };
-            try
+
+            if (!context.States.Any())
             {
-                if (!context.States.Any())
+                foreach (State o in statelist)
                 {
-                    foreach (State o in stlist)
-                    {
-                        context.States.Add(o);
-                    }
-                    context.SaveChanges();
+                    context.States.Add(o);
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
+                context.SaveChanges();
             }
         }
 

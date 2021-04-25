@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DIS_Group10.Models;
-using DIS_Group10.Data;
+using DIS_Group10.DataAccess;
 using Activity = DIS_Group10.Models.Activity;
 
 namespace DIS_Group10.Controllers
@@ -163,7 +163,7 @@ namespace DIS_Group10.Controllers
                 return NotFound();
             }
 
-            var p = await _context.Parks
+            var pk = await _context.Parks
                 .Include(s => s.activities)
                     .ThenInclude(e => e.activity)
                 .Include(s => s.states)
@@ -171,12 +171,13 @@ namespace DIS_Group10.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID.Equals(id));
 
-            if (p == null)
+            if (pk == null)
             {
                 return NotFound();
             }
-            ViewData["Title"] = "Details: " + p.parkCode;
-            return View(p);
+
+            ViewData["Title"] = "Details: " + pk.parkCode;
+            return View(pk);
         }
 //CRUD - Read Ends
 
@@ -303,8 +304,7 @@ namespace DIS_Group10.Controllers
 
             if (saveChangesError.GetValueOrDefault())
             {
-                ViewData["ErrorMessage"] =
-                    "Error Occured";
+                ViewData["ErrorMessage"] = "Error Occured";
             }
 
             return View(p);
