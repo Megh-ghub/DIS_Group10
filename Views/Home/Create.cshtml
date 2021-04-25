@@ -4,19 +4,22 @@
     ViewData["Title"] = "Create";
 }
 
-<div class="container">
-    <div class="card text-center">
-        <div class="card-body">
-            <h4 class="card-title text-center">Please Update The Park Details Below</h4>
+<div class="container-fluid">
+        <div class="card text-center">
+            <div class="card-body">
+                <h4 class="card-title text-center">Please Update The Park Details Below</h4>
 
-            <form method="post" asp-controller="Home" asp-action="Create">
-                    <div class="form-group">
-                        <label asp-for="fullName">Name of the Park</label>
-                        <div>
-                            <textarea class="form-control" asp-for="fullName" rows="1"></textarea>
-                            <span asp-validation-for="fullName"></span>
+                <form method="post" asp-controller="Home" asp-action="Create">
+                    <div class="alert alert-success">
+                        <div class="form-group">
+                            <label asp-for="fullName">Name of the Park</label>
+                            <div>
+                                <textarea class="form-control" asp-for="fullName" rows="1"></textarea>
+                                <span asp-validation-for="fullName"></span>
+                            </div>
                         </div>
                     </div>
+                    <div class="alert alert-success">
                         <div class="form-group">
                             <label asp-for="parkCode">Park Code</label>
                             <div>
@@ -24,7 +27,8 @@
                                 <span asp-validation-for="parkCode"></span>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="alert alert-success">
                         <div class="form-group">
                             <label asp-for="url">Park URL</label>
                             <div>
@@ -32,15 +36,17 @@
                                 <span asp-validation-for="url"></span>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="alert alert-success">
                         <div class="form-group">
                             <label asp-for="description">About The Park</label>
                             <div>
-                                <textarea class="form-control" asp-for="description" rows="10"></textarea>
+                                <textarea class="form-control" asp-for="description" rows="5"></textarea>
                                 <span asp-validation-for="description"></span>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="alert alert-success">
                         <div class="form-group">
                             <label asp-for="statenames">State</label>
                             <div>
@@ -53,7 +59,8 @@
                                 <span asp-validation-for="statenames"></span>
                             </div>
                         </div>
-
+                    </div>
+                    <div class="alert alert-success">
                         <div class="form-group">
                             <label asp-for="activitynames">Activities</label>
                             <div>
@@ -66,12 +73,12 @@
                                 <span asp-validation-for="activitynames"></span>
                             </div>
                         </div>
-
-                        <div class="input-field col-sm-12">
-                            <button class="btn waves-effect waves-light" type="submit" name="action"> Click to Submit Updates </button>
+                    </div>
+                        <div class="col text-center">
+                            <button class="btn btn-success" type="submit" name="action"> Click to Create a New Park </button>
                         </div>
 
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
 </div>

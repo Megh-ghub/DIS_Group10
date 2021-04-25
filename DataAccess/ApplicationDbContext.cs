@@ -22,6 +22,12 @@ namespace DIS_Group10.DataAccess
             modelBuilder.Entity<ParkActivity>()
             .Property(f => f.ID)
             .ValueGeneratedOnAdd();
+            
+            modelBuilder.Entity<Park>()
+            .Property(f => f.ID)
+            .ValueGeneratedOnAdd();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

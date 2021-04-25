@@ -20,7 +20,6 @@ namespace DIS_Group10.DataAccess
         {
             context.Database.EnsureCreated();
             getStates(context);
-
             getActivities(context);
             getParks(context);
         }
@@ -35,7 +34,7 @@ namespace DIS_Group10.DataAccess
                 return;
             }
 
-            string uri = BASE_URL + "/parks?limit=100";
+            string uri = BASE_URL + "/parks?limit=50";
             string responsebody = "";
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -57,54 +56,54 @@ namespace DIS_Group10.DataAccess
                     JObject parsedResponse = JObject.Parse(responsebody);
                     JArray parks = (JArray)parsedResponse["data"];
 
-                    foreach (JObject jsonpark in parks)
+                    foreach (JObject jpark in parks)
                     {
-                        Park p = new Park
+                        Park park = new Park
                         {
-                            ID = (string)jsonpark["id"],
-                            url = (string)jsonpark["url"],
-                            fullName = (string)jsonpark["fullName"],
-                            parkCode = (string)jsonpark["parkCode"],
-                            description = (string)jsonpark["description"],
+                            ID = (string)jpark["id"],
+                            url = (string)jpark["url"],
+                            fullName = (string)jpark["fullName"],
+                            parkCode = (string)jpark["parkCode"],
+                            description = (string)jpark["description"],
                         };
-                        context.Parks.Add(p);
-                        string[] states = ((string)jsonpark["states"]).Split(",");
+                        context.Parks.Add(park);
+                        string[] states = ((string)jpark["states"]).Split(",");
                         foreach (string s in states)
                         {
-                            State st = context.States.Where(c => c.ID == s).FirstOrDefault();
-                            if (st != null)
+                            State state = context.States.Where(c => c.ID == s).FirstOrDefault();
+                            if (state != null)
                             {
-                                StatePark sp = new StatePark()
+                                StatePark statepark = new StatePark()
                                 {
-                                    state = st,
-                                    park = p
+                                    state = state,
+                                    park = park
                                 };
-                                context.StateParks.Add(sp);
+                                context.StateParks.Add(statepark);
                                 context.SaveChanges();
                             }
                         }
-                        JArray activities = (JArray)jsonpark["activities"];
+                        JArray activities = (JArray)jpark["activities"];
                         if (activities.Count != 0)
                         {
                             foreach (JObject jsonactivity in activities)
                             {
-                                Activity a = context.Activities.Where(c => c.ID == (string)jsonactivity["id"]).FirstOrDefault();
-                                if (a == null)
+                                Activity activity = context.Activities.Where(c => c.ID == (string)jsonactivity["id"]).FirstOrDefault();
+                                if (activity == null)
                                 {
-                                    a = new Activity
+                                    activity = new Activity
                                     {
                                         ID = (string)jsonactivity["id"],
                                         name = (string)jsonactivity["name"]
                                     };
-                                    context.Activities.Add(a);
+                                    context.Activities.Add(activity);
                                     context.SaveChanges();
                                 }
-                                ParkActivity pa = new ParkActivity
+                                ParkActivity parkactivity = new ParkActivity
                                 {
-                                    activity = a,
-                                    park = p
+                                    activity = activity,
+                                    park = park
                                 };
-                                context.ParkActivities.Add(pa);
+                                context.ParkActivities.Add(parkactivity);
                             }
                         }
                     }
@@ -125,7 +124,7 @@ namespace DIS_Group10.DataAccess
                 return;
             }
 
-            string uri = BASE_URL + "/activities?limit=100";
+            string uri = BASE_URL + "/activities?limit=50";
             string responsebody = "";
 
             httpClient = new HttpClient();
@@ -150,12 +149,12 @@ namespace DIS_Group10.DataAccess
                     JArray activities = (JArray)parsedResponse["data"];
                     foreach (JObject jsonactivity in activities)
                     {
-                        Activity a = new Activity
+                        Activity activity = new Activity
                         {
                             ID = (string)jsonactivity["id"],
                             name = (string)jsonactivity["name"]
                         };
-                        context.Activities.Add(a);
+                        context.Activities.Add(activity);
                     }
                     context.SaveChanges();
                 }
@@ -228,9 +227,9 @@ namespace DIS_Group10.DataAccess
 
             if (!context.States.Any())
             {
-                foreach (State o in statelist)
+                foreach (State st in statelist)
                 {
-                    context.States.Add(o);
+                    context.States.Add(st);
                 }
                 context.SaveChanges();
             }

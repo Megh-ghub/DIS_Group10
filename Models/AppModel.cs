@@ -16,7 +16,6 @@ namespace DIS_Group10.Models
         public string description { get; set; }
         public ICollection<StatePark> states { get; set; }
         public ICollection<ParkActivity> activities { get; set; }
-
     }
 
     public class Activity
@@ -49,9 +48,35 @@ namespace DIS_Group10.Models
         public Park park { get; set; }
     }
 
+    public class UpdatePark
+    {
+        [Key]
+        public string ID { get; set; }
+        [Required]
+        [Url]
+        public string url { get; set; }
+        [Required]
+        public string fullName { get; set; }
+        [Required]
+        public string parkCode { get; set; }
+        [Required]
+        public string description { get; set; }
+        [Required]
+        public ICollection<string> statenames { get; set; }
+        [Required]
+        public ICollection<string> activitynames { get; set; }
+    }
+
     public class AddNewPark
     {
-        public string ID { get; set; }
+        public AddNewPark()
+        {
+            ID = new Guid();
+        }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public Guid ID { get; set; }
         [Required]
         [Url]
         public string url { get; set; }
