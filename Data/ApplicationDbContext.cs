@@ -15,7 +15,7 @@ namespace DIS_Group10.Data
         public DbSet<Park> Parks { get; set; }
         public DbSet<Activity> Activities { get; set; }
         public DbSet<ParkActivity> ParkActivities { get; set; }
-        public DbSet<State> States { get; set; }
+        public DbSet<State> States { get; set; }        
         public DbSet<StatePark> StateParks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

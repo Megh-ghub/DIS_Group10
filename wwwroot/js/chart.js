@@ -1,71 +1,174 @@
-﻿function displaychart() {
-    var aID = $('#activities').val();
-    let f = new FormData();
-    f.append("id", aID);
-    $.ajax({
-        method: "POST",
-        url: "/Park/Chart",
-        cache: false,
-        contentType: false,
-        processData: false,
-        data: f,
-        success: function (chartdata) {
-            let states = chartdata[0];
-            let parkcount = chartdata[1];
-            let activityname = chartdata[2];
-            if (activityname == null) {
-                activityname = "All Activities"
+﻿
+const config = {
+    type: 'bar',
+    data: data,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Chart.js Bar Chart'
             }
-            let ctx = $("#barchart").get(0).getContext("2d");
-            if (window.bar != undefined)
-                window.bar.destroy(); 
-            window.bar = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: states,
-                    datasets: [
-                        {
-                            label: "Count of Parks",
-                            backgroundColor: Array(10).fill(["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"]).flat(),
-                            data: parkcount
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'State-wise count of parks for ' + activityname
-                    },
-                    scales: {
-                        xAxes: [{
-                            ticks: {
-                                autoSkip: true,
-                                minRotation: 90,
-                                maxRotation: 90
-                            }
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                stepSize: 1,
-                                precision: 0
-                            }
-                        }]
-                    }
-                }
-            });
-        },
-        error: function (req, status, error) {
-            console.log(error);
         }
-    });
-}
+    },
+};
 
-$('#activities').change(displaychart);
+const DATA_COUNT = 7;
+const NUMBER_CFG = { count: DATA_COUNT, min: -100, max: 100 };
+
+const labels = Utils.months({ count: 7 });
+const data = {
+    labels: labels,
+    datasets: [
+        {
+            label: 'Dataset 1',
+            data: Utils.numbers(NUMBER_CFG),
+            borderColor: Utils.CHART_COLORS.red,
+            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+        },
+        {
+            label: 'Dataset 2',
+            data: Utils.numbers(NUMBER_CFG),
+            borderColor: Utils.CHART_COLORS.blue,
+            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
+        }
+    ]
+};
+
+const actions = [
+    {
+        name: 'Randomize',
+        handler(chart) {
+            chart.data.datasets.forEach(dataset => {
+                dataset.data = Utils.numbers({ count: chart.data.labels.length, min: -100, max: 100 });
+            });
+            chart.update();
+        }
+    },
+    {
+        name: 'Add Dataset',
+        handler(chart) {
+            const data = chart.data;
+            const dsColor = Utils.namedColor(chart.data.datasets.length);
+            const newDataset = {
+                label: 'Dataset ' + (data.datasets.length + 1),
+                backgroundColor: Utils.transparentize(dsColor, 0.5),
+                borderColor: dsColor,
+                borderWidth: 1,
+                data: Utils.numbers({ count: data.labels.length, min: -100, max: 100 }),
+            };
+            chart.data.datasets.push(newDataset);
+            chart.update();
+        }
+    },
+    {
+        name: 'Add Data',
+        handler(chart) {
+            const data = chart.data;
+            if (data.datasets.length > 0) {
+                data.labels = Utils.months({ count: data.labels.length + 1 });
+
+                for (var index = 0; index < data.datasets.length; ++index) {
+                    data.datasets[index].data.push(Utils.rand(-100, 100));
+                }
+
+                chart.update();
+            }
+        }
+    },
+    {
+        name: 'Remove Dataset',
+        handler(chart) {
+            chart.data.datasets.pop();
+            chart.update();
+        }
+    },
+    {
+        name: 'Remove Data',
+        handler(chart) {
+            chart.data.labels.splice(-1, 1); // remove the label first
+
+            chart.data.datasets.forEach(dataset => {
+                dataset.data.pop();
+            });
+
+            chart.update();
+        }
+    }
+];
+
+ /*
+    function displaychart() {
+        var aID = $('#activities').val();
+        let f = new FormData();
+        f.append("id", aID);
+        $.ajax({
+            method: "POST",
+            url: "/Home/Chart",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: f,
+            success: function (chartdata) {
+                let states = chartdata[0];
+                let parkcount = chartdata[1];
+                let activityname = chartdata[2];
+                if (activityname == null) {
+                    activityname = "All Activities"
+                }
+                let ctx = $("#barchart").get(0).getContext("2d");
+                if (window.bar != undefined)
+                    window.bar.destroy();
+                window.bar = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: states,
+                        datasets: [
+                            {
+                                label: "Count of Parks",
+                                backgroundColor: Array(10).fill(["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"]).flat(),
+                                data: parkcount
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'State-wise count of parks for ' + activityname
+                        },
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    autoSkip: true,
+                                    minRotation: 90,
+                                    maxRotation: 90
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    stepSize: 1,
+                                    precision: 0
+                                }
+                            }]
+                        }
+                    }
+                });
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $('#activities').change(displaychart);
 $(document).ready(displaychart);
-
+*/
 
 
 

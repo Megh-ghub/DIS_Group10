@@ -337,49 +337,63 @@ namespace DIS_Group10.Controllers
 //CRUD - Delete Starts
 
         //Chart JS Starts 
-        public IActionResult Chart()
+        public ActionResult Chart()
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            foreach (Activity i in _context.Activities)
+            foreach (State i in _context.States)
             {
-                dict.Add(i.ID, i.name);
+
             }
-            ViewBag.adict = dict;
-            return View();
+                //    {
+                //        dict.Add(i.ID, i.name);
+                //    }
+
+                return View();
         }
+        //public IActionResult Chart()
+        //{
+        //    Dictionary<string, string> dict = new Dictionary<string, string>();
+        //    foreach (Activity i in _context.Activities)
+        //    {
+        //        dict.Add(i.ID, i.name);
+        //    }
+        //    ViewBag.adict = dict;
+        //    return View();
+        //}
 
         [HttpPost]
-        public JsonResult Chart(String id)
+        public JsonResult chart(string id)
         {
-            List<object> chartTable = new List<object>();
+            List<object> charttable = new List<object>();
             List<string> statelist = _context.States.Select(s => s.ID).ToList();
             List<int> pcount = new List<int>();
             string aname = _context.Activities.Where(a => a.ID == id).Select(a => a.name).FirstOrDefault();
             foreach (string s in statelist)
             {
-                int parkCount = 0;
-                if (id == "All")
+                int parkcount = 0;
+                if (id == "all")
                 {
-                    parkCount = _context.StateParks
+                    parkcount = _context.StateParks
                     .Where(p => p.state.ID == s)
                     .Select(p => p.park)
                     .Count();
                 }
                 else
                 {
-                    parkCount = _context.StateParks
-                    .Where(p => p.state.ID == s)
-                    .Select(p => p.park)
-                    .Where(p => p.activities.Any(s => s.activity.ID == id))
-                    .Count();
+                    parkcount = _context.StateParks
+                                .Where(p => p.state.ID == s)
+                                .Select(p => p.park)
+                                .Where(p => p.activities.Any(s => s.activity.ID == id))
+                                .Count();
                 }
-                pcount.Add(parkCount);
+                pcount.Add(parkcount);
             }
-            chartTable.Add(statelist);
-            chartTable.Add(pcount);
-            chartTable.Add(aname);
-            return Json(chartTable);
+            charttable.Add(statelist);
+            charttable.Add(pcount);
+            charttable.Add(aname);
+            return Json(charttable);
         }
-        // Chart JS Ends
+        //chart js ends
+
     }
 }
