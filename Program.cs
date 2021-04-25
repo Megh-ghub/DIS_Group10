@@ -16,9 +16,7 @@ namespace DIS_Group10
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-
             CreateDbIfNotExists(host);
-
             host.Run();
         }
         private static void CreateDbIfNotExists(IHost host)
@@ -38,12 +36,13 @@ namespace DIS_Group10
                 }
             }
         }
-
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+            Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults
+            (
+                webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                }
+            );
     }
 }

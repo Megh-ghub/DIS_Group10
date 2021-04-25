@@ -2,7 +2,7 @@
 using DIS_Group10.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq; 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace DIS_Group10.Data
     {
         static HttpClient httpClient;
         static string BASE_URL = "https://developer.nps.gov/api/v1";
-        static string API_KEY = "VXU1saXu5sQvPJawH28GDeoVR8nT6C56vmxGiBFB"; 
+        static string API_KEY = "VXU1saXu5sQvPJawH28GDeoVR8nT6C56vmxGiBFB";
         public static void Initialize(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
@@ -24,6 +24,149 @@ namespace DIS_Group10.Data
             getActivities(context);
             getParks(context);
         }
+
+// Get:: Park Data :: /parks
+
+        public static void getParks(ApplicationDbContext context)
+        {
+
+            if (context.Parks.Any())
+            {
+                return;
+            }
+
+            string uri = BASE_URL + "/parks?limit=100";
+            string responsebody = "";
+            httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Add("X-Api-Key", API_KEY);
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.BaseAddress = new Uri(uri);
+
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(uri).GetAwaiter().GetResult();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    responsebody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                }
+
+                if (!responsebody.Equals(""))
+                {
+                    JObject parsedResponse = JObject.Parse(responsebody);
+                    JArray parks = (JArray)parsedResponse["data"];
+
+                    foreach (JObject jsonpark in parks)
+                    {
+                        Park p = new Park
+                        {
+                            ID = (string)jsonpark["id"],
+                            url = (string)jsonpark["url"],
+                            fullName = (string)jsonpark["fullName"],
+                            parkCode = (string)jsonpark["parkCode"],
+                            description = (string)jsonpark["description"],
+                        };
+                        context.Parks.Add(p);
+                        string[] states = ((string)jsonpark["states"]).Split(",");
+                        foreach (string s in states)
+                        {
+                            State st = context.States.Where(c => c.ID == s).FirstOrDefault();
+                            if (st != null)
+                            {
+                                StatePark sp = new StatePark()
+                                {
+                                    state = st,
+                                    park = p
+                                };
+                                context.StateParks.Add(sp);
+                                context.SaveChanges();
+                            }
+                        }
+                        JArray activities = (JArray)jsonpark["activities"];
+                        if (activities.Count != 0)
+                        {
+                            foreach (JObject jsonactivity in activities)
+                            {
+                                Activity a = context.Activities.Where(c => c.ID == (string)jsonactivity["id"]).FirstOrDefault();
+                                if (a == null)
+                                {
+                                    a = new Activity
+                                    {
+                                        ID = (string)jsonactivity["id"],
+                                        name = (string)jsonactivity["name"]
+                                    };
+                                    context.Activities.Add(a);
+                                    context.SaveChanges();
+                                }
+                                ParkActivity pa = new ParkActivity
+                                {
+                                    activity = a,
+                                    park = p
+                                };
+                                context.ParkActivities.Add(pa);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+// Get:: Activity Data :: /activities
+
+        public static void getActivities(ApplicationDbContext context)
+        {
+            if (context.Activities.Any())
+            {
+                return;
+            }
+
+            string uri = BASE_URL + "/activities?limit=100";
+            string responsebody = "";
+
+            httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Add("X-Api-Key", API_KEY);
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            httpClient.BaseAddress = new Uri(uri);
+
+            try
+            {
+                HttpResponseMessage response = httpClient.GetAsync(uri).GetAwaiter().GetResult();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    responsebody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                }
+
+                if (!responsebody.Equals(""))
+                {
+                    JObject parsedResponse = JObject.Parse(responsebody);
+                    JArray activities = (JArray)parsedResponse["data"];
+                    foreach (JObject jsonactivity in activities)
+                    {
+                        Activity a = new Activity
+                        {
+                            ID = (string)jsonactivity["id"],
+                            name = (string)jsonactivity["name"]
+                        };
+                        context.Activities.Add(a);
+                    }
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+// Force Persisting State Code vs State Name for Clean Display Only
 
         public static void getStates(ApplicationDbContext context)
         {
@@ -92,146 +235,11 @@ namespace DIS_Group10.Data
                     context.SaveChanges();
                 }
             }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-        public static void getParks(ApplicationDbContext context)
-        {
-            
-            if (context.Parks.Any())
-            {
-                return;
-            }
-
-            string uri = BASE_URL + "/parks?limit=100";
-            string responsebody = "";
-            httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.DefaultRequestHeaders.Add("X-Api-Key", API_KEY);
-            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.BaseAddress = new Uri(uri);
-
-            try
-            {
-                HttpResponseMessage response = httpClient.GetAsync(uri).GetAwaiter().GetResult();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    responsebody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                }
-
-                if (!responsebody.Equals(""))
-                {
-                    JObject parsedResponse = JObject.Parse(responsebody);
-                    JArray parks = (JArray)parsedResponse["data"];
-
-                    foreach(JObject jsonpark in parks)
-                    {
-                        Park p = new Park 
-                        {
-                            ID = (string)jsonpark["id"],
-                            url = (string)jsonpark["url"],
-                            fullName = (string)jsonpark["fullName"],
-                            parkCode = (string)jsonpark["parkCode"],
-                            description = (string)jsonpark["description"],
-                        };
-                        context.Parks.Add(p);
-                        string[] states = ((string)jsonpark["states"]).Split(",");
-                        foreach(string s in states)
-                        {
-                            State st = context.States.Where(c => c.ID == s).FirstOrDefault();
-                            if(st != null)
-                            {
-                                StatePark sp = new StatePark()
-                                {
-                                    state = st,
-                                    park = p
-                                };
-                                context.StateParks.Add(sp);
-                                context.SaveChanges();
-                            }
-                        }
-                        JArray activities = (JArray)jsonpark["activities"];
-                        if(activities.Count != 0)
-                        {
-                            foreach (JObject jsonactivity in activities)
-                            {
-                                Activity a = context.Activities.Where(c => c.ID == (string)jsonactivity["id"]).FirstOrDefault();
-                                if (a == null)
-                                {
-                                    a = new Activity
-                                    {
-                                        ID = (string)jsonactivity["id"],
-                                        name = (string)jsonactivity["name"]
-                                    };
-                                    context.Activities.Add(a);
-                                    context.SaveChanges();
-                                }
-                                ParkActivity pa = new ParkActivity
-                                {
-                                    activity = a,
-                                    park = p
-                                };
-                                context.ParkActivities.Add(pa);
-                            }
-                        }                      
-                    }
-                }
-            }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
         }
-        
-        public static void getActivities(ApplicationDbContext context)
-        {
-            if (context.Activities.Any())
-            {
-                return;
-            }
 
-            string uri = BASE_URL + "/activities?limit=100";
-            string responsebody = "";
-
-            httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.DefaultRequestHeaders.Add("X-Api-Key", API_KEY);
-            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-            httpClient.BaseAddress = new Uri(uri);
-
-            try
-            {
-                HttpResponseMessage response = httpClient.GetAsync(uri).GetAwaiter().GetResult();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    responsebody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                }
-
-                if (!responsebody.Equals(""))
-                {
-                    JObject parsedResponse = JObject.Parse(responsebody);
-                    JArray activities = (JArray)parsedResponse["data"];
-                    foreach (JObject jsonactivity in activities)
-                    {
-                        Activity a = new Activity
-                        {
-                            ID = (string)jsonactivity["id"],
-                            name = (string)jsonactivity["name"]
-                        };
-                        context.Activities.Add(a);
-                    }
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
     }
 }

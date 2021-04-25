@@ -16,7 +16,7 @@ namespace DIS_Group10.Models
         public string description { get; set; }
         public ICollection<StatePark> states { get; set; }
         public ICollection<ParkActivity> activities { get; set; }
-        
+
     }
 
     public class Activity
@@ -68,7 +68,3 @@ namespace DIS_Group10.Models
         public ICollection<string> activitynames { get; set; }
     }
 }
-
-
-
-
