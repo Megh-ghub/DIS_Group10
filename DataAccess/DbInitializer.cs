@@ -19,10 +19,9 @@ namespace DIS_Group10.DataAccess
         public static void Initialize(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
-            getStates(context);
-
-            getActivities(context);
             getParks(context);
+            getActivities(context);
+            getStates(context);
         }
 
 // Get Data From API:: Park Data :: /parks
