@@ -31,10 +31,10 @@
                     </div>
                     <div class="row padding">
                         <div class="col-sm-3"><b>Park State</b></div>
+                        <div class="col-sm-9">
                             @foreach (var item in Model.states)
                             {
-                                @Html.DisplayFor(modelItem => item.state.name)
-                            }
+                                @Html.DisplayFor(modelItem => item.state.name)<a>;</a>}
                         </div>
                     </div>
                     <div class="row padding">
@@ -42,7 +42,7 @@
                         <div class="col-sm-9">
                             @foreach (var item in Model.activities)
                             {
-                                    @Html.DisplayFor(modelItem => item.activity.name)<a>  ||  </a>
+                                    @Html.DisplayFor(modelItem => item.activity.name)<a>;</a>
                             }
                         </div>
                     </div>

@@ -49,7 +49,6 @@ namespace DIS_Group10.Models
         public Park park { get; set; }
     }
 
-    // This is a view model
     public class AddNewPark
     {
         public string ID { get; set; }

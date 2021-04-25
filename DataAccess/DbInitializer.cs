@@ -1,4 +1,4 @@
-﻿using DIS_Group10.Data;
+﻿using DIS_Group10.DataAccess;
 using DIS_Group10.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace DIS_Group10.Data
+namespace DIS_Group10.DataAccess
 {
     public static class DbInitializer
     {
@@ -25,7 +25,7 @@ namespace DIS_Group10.Data
             getParks(context);
         }
 
-// Get:: Park Data :: /parks
+// Get Data From API:: Park Data :: /parks
 
         public static void getParks(ApplicationDbContext context)
         {
@@ -116,7 +116,7 @@ namespace DIS_Group10.Data
             }
         }
 
-// Get:: Activity Data :: /activities
+// Get Data From API:: Activity Data :: /activities
 
         public static void getActivities(ApplicationDbContext context)
         {
@@ -166,12 +166,13 @@ namespace DIS_Group10.Data
             }
         }
 
-// Force Persisting State Code vs State Name for Clean Display Only
+// Park API Pulls State Code Only and not Name. Force Persisting State Code vs State Name in DB for Clean State Name Display
 
         public static void getStates(ApplicationDbContext context)
         {
             context.Database.EnsureCreated();
-            State[] stlist = new State[]
+
+            State[] statelist = new State[]
             {
                 new State{ID="AL",name="Alabama"},
                 new State{ID="AK",name="Alaska"},
@@ -224,20 +225,14 @@ namespace DIS_Group10.Data
                 new State{ID="WI",name="Wisconsin"},
                 new State{ID="WY",name="Wyoming"},
             };
-            try
+
+            if (!context.States.Any())
             {
-                if (!context.States.Any())
+                foreach (State o in statelist)
                 {
-                    foreach (State o in stlist)
-                    {
-                        context.States.Add(o);
-                    }
-                    context.SaveChanges();
+                    context.States.Add(o);
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
+                context.SaveChanges();
             }
         }
 

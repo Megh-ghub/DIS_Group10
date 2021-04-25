@@ -1,4 +1,4 @@
-using DIS_Group10.Data;
+using DIS_Group10.DataAccess;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

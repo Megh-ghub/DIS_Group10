@@ -1,7 +1,7 @@
 ﻿@model DIS_Group10.Models.AddNewPark
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
 
 <div class="container">
@@ -9,7 +9,7 @@
         <div class="card-body">
             <h4 class="card-title text-center">Please Update The Park Details Below</h4>
 
-            <form method="post" asp-controller="Home" asp-action="Edit">
+            <form method="post" asp-controller="Home" asp-action="Create">
                     <div class="form-group">
                         <label asp-for="fullName">Name of the Park</label>
                         <div>
@@ -58,7 +58,7 @@
                             <label asp-for="activitynames">Activities</label>
                             <div>
                                 <select multiple asp-for="activitynames">
-                                    @foreach (var item in ViewBag.actnames)
+                                    @foreach (var item in ViewBag.activitynames)
                                     {
                                         <option value="@item">@item</option>
                                     }
