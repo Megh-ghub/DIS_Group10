@@ -5,34 +5,40 @@
 <!--- Welcome Section -->
 <div class="container">
     <h2>National Park Service Datamodel</h2>
-    <p><i>The National Park Service is an agency of the federal government of the United States that manages all national parks, many national monuments, and other conservation and historical properties.</i></p>
-    <div class="panel-group" id="accordion">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Datamodel</a>
-                </h4>
+    <p>The National Park Service is an agency of the federal government of the United States that manages all national parks, many national monuments, and other conservation and historical properties.</p>
+
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        National Park Service Datamodel
+                    </button>
+                </h5>
             </div>
-            <div id="collapse1" class="panel-collapse collapse in">
-                <div class="panel-body">
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <p>
                     <p>
                         The data model contains two one-to-many relationships. One between the entity <b><i>Activities</i></b>
                         and <b><i>Park Activity</i></b> and another between <b><i>Park</i></b> and <b><i>Park Activity</i></b>.
                         <br>
-                        <img src="~/img/datamodel.png" height="450" width="750"></a>
+                        <img src="~/img/datamodel.png" height="450" width="750">
                     </p>
                 </div>
             </div>
         </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">API Documentation</a>
-                </h4>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        API Documentation
+                    </button>
+                </h5>
             </div>
-            <div id="collapse2" class="panel-collapse collapse">
-                <div class="panel-body">
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
                     <p>
                         We have used <b>National Park Service</b> application programming interface.
                         All the api documents and usage guides are available <a href="https://www.nps.gov/subjects/developer/api-documentation.htm">here.</a>
@@ -40,15 +46,20 @@
                 </div>
             </div>
         </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Contributions</a>
-                </h4>
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Contributions
+                    </button>
+                </h5>
             </div>
-            <div id="collapse3" class="panel-collapse collapse">
-                <div class="panel-body">We have used Visual Studio code Editor, Bootstrap and github to collaborate across the team during various stages of bug-fixing and development.</div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                <div class="card-body">
+                    <p>
+                        We have used Visual Studio code Editor, Bootstrap and github to collaborate across the team during various stages of bug-fixing and development.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
