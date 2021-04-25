@@ -26,7 +26,7 @@ html, body {
 }
 .carousel-caption h1 {
   font-size: 500%;
-  text-transform: upperase;
+  text-transform: uppercase;
   text-shadow: 1px 1px 15px #000;
 }
 .carousel-caption h3 {
@@ -43,10 +43,10 @@ html, body {
   background-color: #563d7c;
   border: 1px solid #563d7c;
 }
-    .jumbotron {​​​​​​​
+.jumbotron {​​​​​​​
   padding: 1rem;
   border-radius: 0;
-  text-align: middle;
+  text-align: center;
 }​​​​​​​
 .padding {
   padding-bottom: 2rem;
@@ -107,11 +107,13 @@ hr.light=100 {
   margin-top: .8rem;
   margin-bottom: 1rem;  
 }
+
  .explore {​​​​​​​
   padding: 1rem;
   border-radius: 0;
-  text-align: middle;
+  text-align: center;
 }​​​​​​​
+
 th, td, p, input, h3 {
 	font:18px 'Calibri';
 	padding-left: 3rem;
@@ -142,11 +144,12 @@ th {
     font-size: 90%;
     font-weight: 400;
     padding-bottom: .2rem;
-  }  
-  .carousel-caption btn {
-    font-size: 75%;
-    padding-bottom: 8px 14px;
   }
+.carousel-caption btn {
+	font-size: 75%;
+	padding-bottom: 8px 14px;
+	margin-right: 5px;
+}
   .display-4 {
     font-size: 200%;
   }
@@ -204,10 +207,10 @@ figure {
 	border-radius: 21px;
 }
 
-	.chip.chip-md img {
-		height: 42px;
-		width: 42px;
-	}
+.chip.chip-md img {
+	height: 42px;
+	width: 42px;
+}
 
 .chip.chip-lg {
 	height: 52px;
@@ -215,10 +218,10 @@ figure {
 	border-radius: 26px;
 }
 
-	.chip.chip-lg img {
-		height: 52px;
-		width: 52px;
-	}
+.chip.chip-lg img {
+	height: 52px;
+	width: 52px;
+}
 
 
 

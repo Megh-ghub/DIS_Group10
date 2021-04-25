@@ -35,7 +35,7 @@ namespace DIS_Group10.DataAccess
                 return;
             }
 
-            string uri = BASE_URL + "/parks?limit=100";
+            string uri = BASE_URL + "/parks?limit=50";
             string responsebody = "";
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -125,7 +125,7 @@ namespace DIS_Group10.DataAccess
                 return;
             }
 
-            string uri = BASE_URL + "/activities?limit=100";
+            string uri = BASE_URL + "/activities?limit=50";
             string responsebody = "";
 
             httpClient = new HttpClient();
