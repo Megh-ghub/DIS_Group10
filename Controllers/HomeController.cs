@@ -345,10 +345,15 @@ namespace DIS_Group10.Controllers
             }
         }
 
-//CRUD - Delete Ends
+        //CRUD - Delete Ends
 
-//Chart JS Starts 
- 
-// Chart JS Ends
+        //Chart JS Starts 
+
+        public IActionResult Chart()
+        {
+            return View();
+        }
+
+        // Chart JS Ends
     }
 }
